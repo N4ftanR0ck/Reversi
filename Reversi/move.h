@@ -10,7 +10,7 @@ typedef struct move
 
 } move;
 
-move* getMove(move* mv);
+move* getMove(move* mv, int player);
 int isCorrect(move* mv, int** board);
 int setMove(move* mv, int** board);
 int ifEnd(int** board);

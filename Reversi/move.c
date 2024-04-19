@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "move.h"
 #include <stdio.h>
 
@@ -63,4 +64,50 @@ int setMove(move* mv, int** map)
         }
     }
     return map;
+}
+
+int isCorrect(move* mv, int** board) {/*1 is incorrect data
+                      0 is correct data*/
+    int x_mv = mv->row;
+    int y_mv = mv->column;
+    if (x_mv < 0 || x_mv > 7 || y_mv < 0 || y_mv > 7 || board[x_mv][y_mv] != 0) {
+        return 0;
+    }
+
+    int opponent = mv->player * (-1);
+
+    for (int sh_x = -1; sh_x <= 1; sh_x++) {
+
+        for (int sh_y = -1; sh_y <= 1; sh_y++) {
+
+            if (sh_x == 0 && sh_y == 0) continue;/*skip because no shifts*/
+
+            int x = x_mv - sh_x;
+            int y = y_mv - sh_y;
+            int check_opponent = 0;
+
+            while (x >= 0 && x < 8 && y >= 0 && y < 8 && board[x][y] == opponent) {
+                x += sh_x;
+                y += sh_y;
+                check_opponent = 1;
+            }
+
+            if (check_opponent == 1 && x >= 0 && x < 8 && y >= 0 && y < 8 && board[x][y] == mv->player) {
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
+move* getMove(move* mv, int player)
+{
+    int row;
+    int column;
+    printf("Enter row and column (1 - 8): ");
+    scanf("%d %d", &row, &column);
+    mv->row = row - 1;
+    mv->column = column - 1;
+    mv->player = player;
+    return mv;
 }
