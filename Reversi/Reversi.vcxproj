@@ -128,6 +128,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="interface.c" />
+    <ClCompile Include="move.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="move.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

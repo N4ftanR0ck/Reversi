@@ -1,37 +1,44 @@
 #include <stdio.h>
+#include "move.h"
 
-struct move
+int main(void)
 {
-	int row;
-	int column; 
-};
-
-
-
-int getMove(struct move mv, int** board)
-{
-
-}
-
-
-
-void main(void)
-{
-	int board[8][8] = {
-		{ 0, 0, 0,  0,  0, 0, 0, 0},
-		{ 0, 0, 0,  0,  0, 0, 0, 0},
-		{ 0, 0, 0,  0,  0, 0, 0, 0},
-		{ 0, 0, 0,  1, -1, 0, 0, 0},
-		{ 0, 0, 0, -1,  1, 0, 0, 0},
-		{ 0, 0, 0,  0,  0, 0, 0, 0},
-		{ 0, 0, 0,  0,  0, 0, 0, 0},
-		{ 0, 0, 0,  0,  0, 0, 0, 0}
-	};
-	printf("Insert type of game:\n1 - two players\n2 - play with bot");
-	switch (_getch())
+	int** board = (int**)malloc(8 * sizeof(int*));
+	for (int i = 0; i < 8; i++)
 	{
-		case '1':
-
+		board[i] = (int*)malloc(8 * sizeof(int));
 	}
 
+	printf("Insert type of game:\n1 - two players\n2 - play with bot");
+
+	move* mv = (move*)malloc(sizeof(move));
+	int player = 0;
+
+	switch (_getch())
+	{
+	case '1':
+		while (!ifEnd(board))
+		{
+			do
+			{
+				mv = getMove(mv, player);
+			} while (!isCorrect(mv, board));
+			board = (int**)(setMove(mv, board));
+			++player;
+		}
+		int temp = ifEnd(board);
+		if (temp == 1)
+			printf("first player win!");
+		if (temp == -1)
+			printf("second player win!");
+		if (temp == 10)
+			printf("draw");
+
+	case '2':
+		printf("\nnot ok");
+		break;
+	default:
+		printf("\nerror, try again");
+		break;
+	};
 }
