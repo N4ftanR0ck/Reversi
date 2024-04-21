@@ -17,10 +17,14 @@ int main(void)
 			board[i][j] = 0;
 		}
 	}
+	board[3][3] = 1;
+	board[4][4] = 1;
+	board[3][4] = -1;
+	board[4][3] = -1;
 	printf("Insert type of game:\n1 - two players\n2 - play with bot");
 	
 	move* mv = (move*)malloc(sizeof(move));
-	int player = 0;
+	int player = 1;
 
 	switch (_getch())
 	{
@@ -29,11 +33,13 @@ int main(void)
 		{
 			do
 			{
+
+				printMap(board);
 				mv = getMove(mv, player);
-				printf("hihihaha");
 			} while (!isCorrect(mv, board));
-			board = (int**)(setMove(mv, board));
-			++player;
+
+			printMap(board);
+			player *= -1;
 		}
 		int temp = ifEnd(board);
 		if (temp == 1)

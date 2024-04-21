@@ -4,19 +4,32 @@
 
 void printMap(int** map) {
     printf("\nHere is the gaming board:\n");
+
+    printf("  ");
+    for (int j = 0; j < 8; j++) {
+        printf(" %d  ", j+1);
+    }
+    printf("\n ");
+    for (int j = 0; j < 33; j++) {
+        printf("-");
+    }
+    printf("\n");
     for (int i = 0; i < 8; i++) {
-        printf("| ");
+        printf("%d| ",i+1);
         for (int j = 0; j < 8; j++) {
             if (map[i][j] == 1) {
                 printf("W | ");
             }
-            else printf("B | ");
+            else if (map[i][j] == -1)
+                printf("B | ");
+            else
+                printf("  | ");
         }
-        printf('\n');
+        printf("\n ");
         for (int j = 0; j < 33; j++) {
-            printf('-');
+            printf("-");
         }
-        printf('\n');
+        printf("\n");
     }
 }
 
@@ -87,12 +100,27 @@ int isCorrect(move* mv, int** board) {/*1 is incorrect data
             int check_opponent = 0;
 
             while (x >= 0 && x < 8 && y >= 0 && y < 8 && board[x][y] == opponent) {
-                x += sh_x;
-                y += sh_y;
-                check_opponent = 1;
+                while (board[x][y] == opponent)
+                {
+                    x -= sh_x;
+                    y -= sh_y;
+                }
+                if (board[x][y] == mv->player)
+                {
+                    check_opponent = 1;
+                    x = x_mv - sh_x;
+                    y = y_mv - sh_y;
+                    board[x_mv][y_mv] = mv->player;
+                    while (board[x][y] == opponent)
+                    {
+                        board[x][y] *= -1;
+                        x -= sh_x;
+                        y -= sh_y;
+                    }
+                }
             }
 
-            if (check_opponent == 1 && x >= 0 && x < 8 && y >= 0 && y < 8 && board[x][y] == mv->player) {
+            if (check_opponent == 1) {
                 return 1;
             }
         }
@@ -104,7 +132,7 @@ move* getMove(move* mv, int player)
 {
     int row;
     int column;
-    printf("Enter row and column (1 - 8): ");
+    printf("\nEnter row and column (1 - 8): ");
     scanf("%d %d", &row, &column);
     mv->row = row - 1;
     mv->column = column - 1;
