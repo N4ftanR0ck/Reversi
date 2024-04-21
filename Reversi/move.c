@@ -62,7 +62,7 @@ int setMove(move* mv, int** map)
 
     for (int i = 0; i < 8; i++) {
         int r = mv->row + mr[i], c = mv->column + mc[i];
-        while (map[r][c] != map[mv->row][mv->column] && map[r][c] != 0) {
+        while (map[r][c] != map[mv->row][mv->column] && map[r][c] != 0 && r < 8 && c < 8) {
             r += mr[i];
             c += mc[i];
             if (map[r][c] == map[mv->row][mv->column]) {
