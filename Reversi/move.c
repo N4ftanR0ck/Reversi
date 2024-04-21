@@ -100,18 +100,18 @@ int isCorrect(move* mv, int** board) {/*1 is incorrect data
             int check_opponent = 0;
 
             while (x >= 0 && x < 8 && y >= 0 && y < 8 && board[x][y] == opponent) {
-                while (board[x][y] == opponent)
+                while (x >= 0 && x < 8 && y >= 0 && y < 8 && board[x][y] == opponent)
                 {
                     x -= sh_x;
                     y -= sh_y;
                 }
-                if (board[x][y] == mv->player)
+                if (x >= 0 && x < 8 && y >= 0 && y < 8 && board[x][y] == mv->player)
                 {
                     check_opponent = 1;
                     x = x_mv - sh_x;
                     y = y_mv - sh_y;
                     board[x_mv][y_mv] = mv->player;
-                    while (board[x][y] == opponent)
+                    while (x >= 0 && x < 8 && y >= 0 && y < 8 && board[x][y] == opponent)
                     {
                         board[x][y] *= -1;
                         x -= sh_x;

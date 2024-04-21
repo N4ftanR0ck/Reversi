@@ -2,9 +2,16 @@
 #include <stdio.h>
 #include <malloc.h>
 #include "move.h"
+#include "openGL.h"
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 int main(void)
 {
+
+	//windowCallback();
+
 	int** board = (int**)malloc(8 * sizeof(int*));
 	for (int i = 0; i < 8; i++)
 	{
@@ -56,4 +63,5 @@ int main(void)
 		printf("\nerror, try again");
 		break;
 	};
+	return 0;
 }
