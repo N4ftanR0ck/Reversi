@@ -135,7 +135,7 @@
   <ItemGroup>
     <ClCompile Include="interface.c" />
     <ClCompile Include="move.c" />
-    <ClCompile Include="openGL.h" />
+    <ClCompile Include="openGL.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="move.h" />

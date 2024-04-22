@@ -21,7 +21,7 @@
     <ClCompile Include="move.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="openGL.h">
+    <ClCompile Include="openGL.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
