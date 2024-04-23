@@ -38,16 +38,16 @@ int ifEnd(int** map) {
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
             if (map[i][j] == 0) {
-                return 0; //Игра не окончена
+                return 0; //пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             }
             summ += map[i][j];
         }
     }
     if (summ > 0) {
-        return 1; //Победа белых
+        return 1; //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     }
-    else if (summ < 0) return -1; //Победа черных
-    else return 10; //Ничья
+    else if (summ < 0) return -1; //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    else return 10; //пїЅпїЅпїЅпїЅпїЅ
 }
 
 int setMove(move* mv, int** map)
@@ -114,7 +114,7 @@ int isCorrect(move* mv, int** board) {/*1 is incorrect data
                     x = x_mv - sh_x;
                     y = y_mv - sh_y;
                     board[x_mv][y_mv] = mv->player;
-                    while (x >= 0 && x < 8 && y >= 0 && y < 8 && board[x][y] == opponent)
+                    while (x >= 0 && x < 8 && y >= 0 && y < 8 && board[x][y] == opponent)/*turning over the chips*/
                     {
                         board[x][y] *= -1;
                         x -= sh_x;
@@ -128,6 +128,44 @@ int isCorrect(move* mv, int** board) {/*1 is incorrect data
         return 1;
     return 0;
 }
+
+
+int check_possible_step(int **board, int player){/*1 - possible     0 - impossible*/
+    for (int i=0; i<8; i++){
+        for (int j=0; j<8; j++){
+
+            if (board[i][j] == 0){
+
+                for (int dx = -1; dx<=1; dx++){
+                    for (int dy = -1; dy<=1; dy++){
+
+                        if (dx == 0 && dy == 0) continue;
+
+                        int x = i + dx;
+                        int y = j + dy;
+                        int opponent = player * (-1);
+                        int check_opponent = 0;
+                        while (x >= 0 && x < 8 && y >= 0 && y < 8 && board[x][y] == opponent){
+                            x += dx;
+                            y += dy;
+                            check_opponent = 1;
+                        }
+                        
+                        if (check_opponent == 1 && x >= 0 && x < 8 && y >= 0 && y < 8 && board[x][y] == player){
+                            return 1;
+                        }
+
+                    }
+                }
+
+            }
+            
+        }
+    }
+
+    return 0;
+}
+
 
 move* getMove(move* mv, int player)
 {
