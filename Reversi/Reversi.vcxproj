@@ -135,7 +135,9 @@
   <ItemGroup>
     <ClCompile Include="interface.c" />
     <ClCompile Include="move.c" />
-    <ClCompile Include="openGL.c" />
+    <ClCompile Include="openGL.c">
+      <AdditionalModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">opengl32.lib;glut32.lib;glu32.lib;%(AdditionalModuleDependencies)</AdditionalModuleDependencies>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="move.h" />
