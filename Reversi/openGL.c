@@ -18,7 +18,7 @@ double xPos = 0;
 double yPos = 0;
 
 move* mv;
-int player = 1;
+int player = -1;
 int** board;
 
 float vertices[6];
@@ -48,7 +48,7 @@ int main(void)
 	board[4][3] = -1;
 	board[4][4] = 1;
 	board[3][3] = 1;
-	
+
 	glfwSetCursorPosCallback(window, cursorPositionCallback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
@@ -112,7 +112,7 @@ int main(void)
 		}
 
 		glDisableClientState(GL_COLOR_ARRAY);
-		
+
 		int kk = 0;
 		for (int i = 0; i < 8; i++)
 		{
@@ -211,15 +211,25 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 	{
-		int x = (int)((xPos-449)*8/600);
-		int y = (int)((yPos-75)*8/637);
+		int x = (int)((xPos - 449) * 8 / 600);
+		int y = (int)((yPos - 75) * 8 / 637);
 		printf("%d, %d", x, y);
 		mv->row = x;
 		mv->column = y;
 		mv->player = player;
+
+		
+
 		if (isCorrect(mv, board))
 		{
+			//printf("\nx: %d\ny: %d\n", x, y);
+			setMove(mv, board); //Board change
 			player *= -1;
+
+			//Здесь будет выводиться ход бота в консоль.
+			move* botmv;
+			botmv = botMove(board, player);
+
 		}
 
 		printMap(board);
