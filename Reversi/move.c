@@ -328,7 +328,7 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
 
 
                 n += 1;
-                if (free_squares == 0 || ((cur+50 < maxx) && n==4)) { //Возможно второе условие не нужно
+                if (free_squares == 0) { //Возможно второе условие не нужно
                     return;
                 }
                 if (n < 5) {//Если не конец
