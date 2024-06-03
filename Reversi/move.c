@@ -350,6 +350,8 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
                     free(saved_board[x]);
                 }
                 free(saved_board);
+                free(mvplayer);
+                free(mv);
             }
         }
     }
@@ -361,7 +363,8 @@ move* botMove(int** board, int player) {
     move* mv = (move*)malloc(sizeof(move));
     mv->column = ansi;
     mv->row = ansj;
-    mv->player = -1;
+    mv->player = player;
     printf("\nRecommended (bot) step:\nx: %d\ny: %d\n", ansi, ansj);
     return mv;
 }
+

@@ -13,18 +13,31 @@ void cursorEnterCallback(GLFWwindow* window, int entered);
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 void drawCircle(int pos1, int pos2, int player, float* vertices);
 void drawEnd(float* vertices);
+int choose_game_mode();
+void draw_button();
 
 double xPos = 0;
 double yPos = 0;
 
 move* mv;
-int player = -1;
+int player = -1, game_mode;
 int** board;
 
 float vertices[6];
 
 int main(void)
 {
+	game_mode = choose_game_mode();
+	if (game_mode == 1) {
+		puts("Game mode 1!");
+	}
+	else if (game_mode == 2){
+		puts("Game mode 2!");
+	}
+	else { 
+		puts("Error!");
+		return 0; 
+	}
 	GLFWwindow* window;
 	if (!glfwInit())
 		return -1;
@@ -218,19 +231,20 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 		mv->column = y;
 		mv->player = player;
 
-		
 
 		if (isCorrect(mv, board))
 		{
 			//printf("\nx: %d\ny: %d\n", x, y);
 			setMove(mv, board); //Board change
 			player *= -1;
-
-			//Здесь будет выводиться ход бота в консоль.
-			move* botmv;
-			botmv = botMove(board, player);
-
+			if (game_mode == 1) {
+				move* botmv;
+				botmv = botMove(board, player);
+				setMove(botmv, board);
+				player *= -1;
+			}
 		}
+		//Здесь будет выводиться ход бота в консоль.
 
 		printMap(board);
 		int temp = ifEnd(board);
@@ -288,5 +302,255 @@ void drawCircle(int pos1, int pos2, int player, float* vertices)
 			glDrawArrays(GL_TRIANGLE_FAN, 0, 3);
 		}
 	}
+
+}
+
+
+
+int choose_game_mode() {
+	if (!glfwInit()) {
+		fprintf(stderr, "Failed to initialize GLFW\n");
+		return -1;
+	}
+
+	GLFWwindow* window = glfwCreateWindow(1200, 800, "Choose Game Mode", NULL, NULL);
+	if (!window) {
+		fprintf(stderr, "Failed to open GLFW window\n");
+		glfwTerminate();
+		return -1;
+	}
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+	glfwSetCursorEnterCallback(window, cursorEnterCallback);
+	
+
+	int selectedMode = 0;
+	glfwMakeContextCurrent(window);
+	while (!glfwWindowShouldClose(window)) {
+		glClear(GL_COLOR_BUFFER_BIT);
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_COLOR_ARRAY);
+		
+
+		double xpos, ypos;
+		glfwGetCursorPos(window, &xpos, &ypos);
+		
+		draw_button();
+		
+
+		ypos = 600 - ypos; 
+
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+			if (xpos >= 60 && xpos <= 540 && ypos >= 0 && ypos <= 400 ) {
+				selectedMode = 1;
+				break;
+			}
+			else if (xpos >= 660 && xpos <= 1140 && ypos >= 0 && ypos <= 400) {
+				selectedMode = 2;
+				break;
+			}
+		}
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	}
+
+	glfwDestroyWindow(window);
+	glfwTerminate();
+
+	return selectedMode;
+}
+
+
+void draw_button() {// for choose_game_mode
+	vertices[0] = -0.9;
+	vertices[1] = 0.5;
+	vertices[2] = 0.0;
+	vertices[3] = -0.9;
+	vertices[4] = -0.5;
+	vertices[5] = 0.0;
+	vertices[6] = -0.1;
+	vertices[7] = -0.5;
+	vertices[8] = 0.0;
+	vertices[9] = -0.1;
+	vertices[10] = 0.5;
+	vertices[11] = 0.0;
+
+	float color[] =
+	{
+		128, 0, 128,
+		123, 104, 238,
+		128, 0, 128,
+		123, 104, 238
+	};
+
+
+	glVertexPointer(3, GL_FLOAT, 0, vertices);
+	glColorPointer(3, GL_FLOAT, 0, color);
+	glDrawArrays(GL_LINES, 0, 4);
+	vertices[0] = -0.1;
+	vertices[1] = -0.5;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[3] = -0.1;
+	vertices[4] = 0.5;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = -0.9;
+	vertices[1] = 0.5;
+	glDrawArrays(GL_LINES, 0, 2);
+
+
+	vertices[0] = 0.9;
+	vertices[1] = -0.5;
+	vertices[2] = 0.0;
+	vertices[3] = 0.9;
+	vertices[4] = 0.5;
+	vertices[5] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = 0.1;
+	vertices[1] = 0.5;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[3] = 0.1;
+	vertices[4] = -0.5;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = 0.9;
+	vertices[1] = -0.5;
+	glDrawArrays(GL_LINES, 0, 2);
+
+	//WRITE BOT
+	//B
+	vertices[0] = -0.8;
+	vertices[1] = 0.3;
+	vertices[2] = 0.0;
+	vertices[3] = -0.8;
+	vertices[4] = -0.3;
+	vertices[5] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = -0.65;
+	vertices[1] = -0.3;
+	vertices[2] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[3] = -0.65;
+	vertices[4] = 0.0;
+	vertices[5] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = -0.8;
+	vertices[1] = 0.0;
+	vertices[2] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[3] = -0.8;
+	vertices[4] = 0.3;
+	vertices[5] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = -0.7;
+	vertices[1] = 0.3;
+	vertices[2] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[3] = -0.7;
+	vertices[4] = 0.0;
+	vertices[5] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+
+	//O
+	vertices[0] = -0.6;
+	vertices[1] = -0.3;
+	vertices[2] = 0.0;
+	vertices[3] = -0.6;
+	vertices[4] = 0.3;
+	vertices[5] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = -0.45;
+	vertices[1] = 0.3;
+	vertices[2] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[3] = -0.45;
+	vertices[4] = -0.3;
+	vertices[5] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = -0.6;
+	vertices[1] = -0.3;
+	vertices[2] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+
+	//T
+	vertices[0] = -0.4;
+	vertices[1] = 0.3;
+	vertices[2] = 0.0;
+	vertices[3] = -0.15;
+	vertices[4] = 0.3;
+	vertices[5] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = -0.27;
+	vertices[1] = 0.3;
+	vertices[2] = 0.0;
+	vertices[3] = -0.27;
+	vertices[4] = -0.3;
+	vertices[5] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+
+	//WRITE 1 on 1
+	//1
+	vertices[0] = 0.15;
+	vertices[1] = 0.2;
+	vertices[2] = 0.0;
+	vertices[3] = 0.2;
+	vertices[4] = 0.3;
+	vertices[5] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = 0.2;
+	vertices[1] = -0.3;
+	vertices[2] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+
+	//on
+	//o
+	vertices[0] = 0.3;
+	vertices[1] = 0.3;
+	vertices[2] = 0.0;
+	vertices[3] = 0.3;
+	vertices[4] = -0.3;
+	vertices[5] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = 0.45;
+	vertices[1] = -0.3;
+	vertices[2] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[3] = 0.45;
+	vertices[4] = 0.3;
+	vertices[5] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = 0.3;
+	vertices[1] = 0.3;
+	vertices[2] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	
+	//n
+	vertices[0] = 0.5;
+	vertices[1] = -0.3;
+	vertices[2] = 0.0;
+	vertices[3] = 0.5;
+	vertices[4] = 0.3;
+	vertices[5] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = 0.6;
+	vertices[1] = -0.3;
+	vertices[2] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[3] = 0.6;
+	vertices[4] = 0.3;
+	vertices[5] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+
+	//1
+	vertices[0] = 0.7;
+	vertices[1] = 0.2;
+	vertices[2] = 0.0;
+	vertices[3] = 0.75;
+	vertices[4] = 0.3;
+	vertices[5] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = 0.75;
+	vertices[1] = -0.3;
+	vertices[2] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
 
 }
