@@ -363,8 +363,8 @@ move* botMove(int** board, int player) {
     int ansi = 8, ansj = 8, maxx = -10000, cur = 0;
     try(0, cur, &maxx, 0, 0, &ansi, &ansj, board, player);
     move* mv = (move*)malloc(sizeof(move));
-    mv->column = ansi;
-    mv->row = ansj;
+    mv->column = ansj;
+    mv->row = ansi;
     mv->player = player;
     printf("\nRecommended (bot) step:\nx: %d\ny: %d\n", ansi, ansj);
     return mv;
