@@ -185,66 +185,37 @@ int getPriority(int x, int y, int** map, int player) { //How many points we will
     }
     int evristics[8][8] = { 0 }; //Everistical numbers may be fixed while testing the bot
 
-    evristics[0][0] = 20;
-    evristics[0][7] = 20;
-    evristics[7][0] = 20;
-    evristics[7][7] = 20;
+    evristics[7][0] = 10; evristics[7][7] = 10;
+    evristics[0][2] = 5;
+    evristics[0][3] = 5; evristics[0][4] = 5;
+    evristics[0][5] = 5;
+    evristics[5][7] = 5; evristics[2][7] = 5;
+    evristics[3][7] = 5; evristics[4][7] = 5;
+    evristics[7][2] = 5;
+    evristics[7][3] = 5; evristics[7][4] = 5;
+    evristics[7][5] = 5;
+    evristics[2][0] = 5; evristics[3][0] = 5;
+    evristics[4][0] = 5; evristics[5][0] = 5;
+    evristics[1][2] = -1;
+    evristics[1][3] = -1; evristics[1][4] = -1;
+    evristics[1][5] = -1;
+    evristics[5][6] = -1; evristics[2][6] = -1;
+    evristics[3][6] = -1; evristics[4][6] = -1;
+    evristics[6][2] = -1;
+    evristics[6][3] = -1; evristics[6][4] = -1;
+    evristics[6][5] = -1;
+    evristics[2][1] = -1; evristics[3][1] = -1;
+    evristics[4][1] = -1; evristics[5][1] = -1;
+    evristics[0][1] = -5;
+    evristics[1][1] = -5; evristics[1][0] = -5;
 
-    evristics[0][2] = 10;
-    evristics[0][3] = 10;
-    evristics[0][4] = 10;
-    evristics[0][5] = 10;
+    evristics[0][6] = -5; evristics[1][6] = -5;
+    evristics[1][7] = -5;
+    evristics[7][6] = -5; evristics[6][6] = -5;
+    evristics[6][7] = -5;
+    evristics[6][0] = -5; evristics[6][1] = -5;
+    evristics[7][1] = -5;
 
-    evristics[5][7] = 10;
-    evristics[2][7] = 10;
-    evristics[3][7] = 10;
-    evristics[4][7] = 10;
-
-    evristics[7][2] = 10;
-    evristics[7][3] = 10;
-    evristics[7][4] = 10;
-    evristics[7][5] = 10;
-
-    evristics[2][0] = 10;
-    evristics[3][0] = 10;
-    evristics[4][0] = 10;
-    evristics[5][0] = 10;
-
-    evristics[1][2] = -9;
-    evristics[1][3] = -9;
-    evristics[1][4] = -9;
-    evristics[1][5] = -9;
-
-    evristics[5][6] = -9;
-    evristics[2][6] = -9;
-    evristics[3][6] = -9;
-    evristics[4][6] = -9;
-
-    evristics[6][2] = -9;
-    evristics[6][3] = -9;
-    evristics[6][4] = -9;
-    evristics[6][5] = -9;
-
-    evristics[2][1] = -9;
-    evristics[3][1] = -9;
-    evristics[4][1] = -9;
-    evristics[5][1] = -9;
-
-    evristics[0][1] = -15;
-    evristics[1][1] = -15;
-    evristics[1][0] = -15;
-
-    evristics[0][6] = -15;
-    evristics[1][6] = -15;
-    evristics[1][7] = -15;
-
-    evristics[7][6] = -15;
-    evristics[6][6] = -15;
-    evristics[6][7] = -15;
-
-    evristics[6][0] = -15;
-    evristics[6][1] = -15;
-    evristics[7][1] = -15;
 
     int ans = 0;
     map[x][y] = player;
@@ -287,11 +258,9 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
             if (getPriority(i, j, board, player) > 0)
             {
                 int free_squares = 0;
-                /*int** saved_board = (int**)malloc(sizeof(int*) * 8);*/
-                int saved_board[8][8] = {0};
-
+                int** saved_board = (int**)malloc(sizeof(int*) * 8);
                 for (int x = 0; x < 8; x++) {
-                    //saved_board[x] = (int*)malloc(sizeof(int) * 8);
+                    saved_board[x] = (int*)malloc(sizeof(int) * 8);
                     for (int y = 0; y < 8; y++) {
                         saved_board[x][y] = board[x][y];
                         if (board[x][y] == 0) free_squares++;
@@ -302,14 +271,14 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
                     curi = i;
                     curj = j;
                 }
-                move mv; //Запись варианта
-                
-                mv.row = i;
-                mv.column = j;
-                mv.player = player; //Player всегда фиксированный, потому что это бот. Заменить на константу.
+                move* mv; //Запись варианта
+                mv = (move*)malloc(sizeof(move));
+                mv->row = i;
+                mv->column = j;
+                mv->player = player; //Player всегда фиксированный, потому что это бот. Заменить на константу.
                 cur += getPriority(i, j, board, player);
-                board = setMove(&mv, board);
-                
+                board = setMove(mv, board);
+
                 int opi = 0, opj = 0, opmaxx = -1000;
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
@@ -320,12 +289,12 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
                         }
                     }
                 }
-                move mvplayer;
-                
-                mvplayer.row = opi;
-                mvplayer.column = opj;
-                mvplayer.player = player * (-1);
-                board = setMove(&mvplayer, board);
+                move* mvplayer;
+                mvplayer = (move*)malloc(sizeof(move));
+                mvplayer->row = opi;
+                mvplayer->column = opj;
+                mvplayer->player = player * (-1);
+                board = setMove(mvplayer, board);
                 cur -= opmaxx;
 
 
@@ -349,11 +318,11 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
                     for (int y = 0; y < 8; y++) {
                         board[x][y] = saved_board[x][y];
                     }
-                    /*free(saved_board[x]);*/
+                    free(saved_board[x]);
                 }
-               /* free(saved_board);*/
-                /*free(mvplayer);*/
-                /*free(mv);*/
+                free(saved_board);
+                free(mvplayer);
+                free(mv);
             }
         }
     }
@@ -369,4 +338,3 @@ move* botMove(int** board, int player) {
     printf("\nRecommended (bot) step:\nx: %d\ny: %d\n", ansi, ansj);
     return mv;
 }
-

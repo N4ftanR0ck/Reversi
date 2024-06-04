@@ -15,13 +15,14 @@ void drawCircle(int pos1, int pos2, int player, float* vertices);
 void drawEnd(float* vertices);
 int choose_game_mode();
 void draw_button();
+void end_game(int** board);
 
 
 double xPos = 0;
 double yPos = 0;
 
 move* mv;
-int player = -1, game_mode, flag_ps = 0;
+int player = -1, game_mode, flag_ps = 0;//game_mode - выбор режима игры(1 с ботом; 2 без бота, игра один на один) ;flag_ps - флаг возможности хода, если два раза подряд 1, то игра закончилась
 int** board;
 
 float vertices[6];
@@ -234,30 +235,20 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 		mv->column = y;
 		mv->player = player;
 
-		if (check_possible_step(board, player) == 0) {
-			if (flag_ps == 1) {
-				puts("END GAME");
-			}
-			else {
-				player *= -1;
-				flag_ps = 1;
-			}
-		}
+		
 		if (isCorrect(mv, board))
 		{
-			setMove(mv, board); //Board change
+			flag_ps = 0;
+			setMove(mv, board); 
 			player *= -1;
+
 			if (game_mode == 1) {
 				if (check_possible_step(board, player) == 0) {
-					if (flag_ps == 1) {
-						puts("END GAME");
-					}
-					else {
-						player *= -1;
-						flag_ps = 1;
-					}
+					player *= -1; 
+					flag_ps = 1;
 				}
 				else {
+					flag_ps = 0;
 					move* botmv;
 					botmv = botMove(board, player);
 					setMove(botmv, board);
@@ -265,24 +256,53 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 				}
 			}
 		}
+		if (check_possible_step(board, player) == 0) {// проверяем возможность хода первого игрока
+			if (flag_ps == 1) {
+				end_game(board);
+			}
+			else {//переключение на второго игрока
+				player *= -1;
+				flag_ps = 1;
 
-		printMap(board);
-		int temp = ifEnd(board);
-		if (temp == 1)
-		{
-			printf("first player win!");
-			drawEnd(vertices);
+				if (game_mode == 1) {
+					if (check_possible_step(board, player) == 0) {
+						player *= -1; 
+						if (check_possible_step(board, player) == 0) {
+							end_game(board); 
+						}
+					}
+					else {
+						flag_ps = 0;
+						move* botmv;
+						botmv = botMove(board, player);
+						setMove(botmv, board);
+						player *= -1;
+					}
+				}
+			}
 		}
-		if (temp == -1)
-		{
-			printf("second player win!");
-			drawEnd(vertices);
-		}
-		if (temp == 10)
-			printf("draw");
+		end_game(board);
 	}
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
 		printf("\n");
+}
+
+
+void end_game(int** board) {
+	printMap(board);
+	int temp = ifEnd(board);
+	if (temp == 1)
+	{
+		printf("first player win!");
+		drawEnd(vertices);
+	}
+	if (temp == -1)
+	{
+		printf("second player win!");
+		drawEnd(vertices);
+	}
+	if (temp == 10)
+		printf("draw");
 }
 
 void drawCircle(int pos1, int pos2, int player, float* vertices)
@@ -355,7 +375,6 @@ int choose_game_mode() {
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
 		draw_button();
-		
 
 		ypos = 600 - ypos; 
 
