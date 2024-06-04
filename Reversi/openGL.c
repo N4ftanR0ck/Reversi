@@ -59,10 +59,16 @@ int main(void)
 			board[i][j] = 0;
 		}
 	}
-	board[3][4] = -1;
-	board[4][3] = -1;
-	board[4][4] = 1;
-	board[3][3] = 1;
+	board[3][4] = 1;
+	board[4][3] = 1;
+	board[4][4] = -1;
+	board[3][3] = -1;
+
+	if (game_mode == 1) { //Первым ходит бот
+		move* bot_mv = (move*)malloc(sizeof(move));
+		bot_mv = botMove(board, 1);
+		board = setMove(bot_mv, board);
+	}
 
 	glfwSetCursorPosCallback(window, cursorPositionCallback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

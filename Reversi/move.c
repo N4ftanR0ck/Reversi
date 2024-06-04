@@ -184,11 +184,13 @@ int getPriority(int x, int y, int** map, int player) { //How many points we will
         return 0;
     }
     int evristics[8][8] = { 0 }; //Everistical numbers may be fixed while testing the bot
+    int mr[8] = { -1, -1, -1, 0, 1, 1, 1, 0 };
+    int mc[8] = { -1, 0, 1, 1, 1, 0, -1, -1 };
 
-    evristics[0][0] = 10;
-    evristics[0][7] = 10;
-    evristics[7][0] = 10;
-    evristics[7][7] = 10;
+    evristics[0][0] = 15;
+    evristics[0][7] = 15;
+    evristics[7][0] = 15;
+    evristics[7][7] = 15;
 
     evristics[0][2] = 5;
     evristics[0][3] = 5;
@@ -230,26 +232,41 @@ int getPriority(int x, int y, int** map, int player) { //How many points we will
     evristics[4][1] = -1;
     evristics[5][1] = -1;
 
-    evristics[0][1] = -5;
-    evristics[1][1] = -5;
-    evristics[1][0] = -5;
-
+    if (map[0][0] == 0) {
+        evristics[0][1] = -5;
+        evristics[1][1] = -5;
+        evristics[1][0] = -5;
+    }
+    if (map[0][7] == 0) {
     evristics[0][6] = -5;
     evristics[1][6] = -5;
     evristics[1][7] = -5;
-
+    }
+    if (map[7][7] == 0) {
     evristics[7][6] = -5;
     evristics[6][6] = -5;
     evristics[6][7] = -5;
+    }
+    if (map[7][0] == 0) {
+        evristics[6][0] = -5;
+        evristics[6][1] = -5;
+        evristics[7][1] = -5;
+    }
+    int counter;
+    for (int x = 1; x < 7; x++) {
+        for (int y = 1; y < 7; y++) {
+            counter = 0;
+            for (int l = 0; l < 8; l++) {
+                if (map[x + mr[l]][y + mc[l]] == (player * (-1))) counter += 2; //maybe +=1
+            }
+            evristics[x][y] -= counter;
+        }
+    }
 
-    evristics[6][0] = -5;
-    evristics[6][1] = -5;
-    evristics[7][1] = -5;
 
     int ans = 0;
     map[x][y] = player;
-    int mr[8] = { -1, -1, -1, 0, 1, 1, 1, 0 };
-    int mc[8] = { -1, 0, 1, 1, 1, 0, -1, -1 };
+   
     int flag = 0; // checking is it possible to place a dot here
     for (int i = 0; i < 8; i++) {
         int r = x + mr[i], c = y + mc[i];
@@ -281,77 +298,86 @@ int getPriority(int x, int y, int** map, int player) { //How many points we will
 void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, int** board, int player) {
     //С этой функцией работаем так, так что в botStep() делаем все нужные переменные и передаем их в try как указатели, а на выходе берем итоговое значение из ansi ansj
     int i, j;
-
-    for (i = 0; i < 8; i++) {
-        for (j = 0; j < 8; j++) {
-            if (getPriority(i, j, board, player) > 0)
-            {
-                int free_squares = 0;
-                int** saved_board = (int**)malloc(sizeof(int*) * 8);
-                for (int x = 0; x < 8; x++) {
-                    saved_board[x] = (int*)malloc(sizeof(int) * 8);
-                    for (int y = 0; y < 8; y++) {
-                        saved_board[x][y] = board[x][y];
-                        if (board[x][y] == 0) free_squares++;
-                    }
-                }
-                int cursaved = cur;
-                if (n == 0) { //Coordinates of step
-                    curi = i;
-                    curj = j;
-                }
-                move* mv; //Запись варианта
-                mv = (move*)malloc(sizeof(move));
-                mv->row = i;
-                mv->column = j;
-                mv->player = player; //Player всегда фиксированный, потому что это бот. Заменить на константу.
-                cur += getPriority(i, j, board, player);
-                board = setMove(mv, board);
-
-                int opi = 0, opj = 0, opmaxx = -1000;
-                for (int i = 0; i < 8; i++) {
-                    for (int j = 0; j < 8; j++) {
-                        if (getPriority(i, j, board, player * (-1)) > opmaxx) {
-                            opmaxx = getPriority(i, j, board, player * (-1));
-                            opi = i;
-                            opj = j;
+    if (n >= 6) return;
+    else{
+        for (i = 0; i < 8; i++) {
+            for (j = 0; j < 8; j++) {
+                if (getPriority(i, j, board, player) > 0)
+                {
+                    int free_squares = 0;
+                    int** saved_board = (int**)malloc(sizeof(int*) * 8);
+                    for (int x = 0; x < 8; x++) {
+                        saved_board[x] = (int*)malloc(sizeof(int) * 8);
+                        for (int y = 0; y < 8; y++) {
+                            saved_board[x][y] = board[x][y];
+                            if (board[x][y] == 0) free_squares++;
                         }
                     }
-                }
-                move* mvplayer;
-                mvplayer = (move*)malloc(sizeof(move));
-                mvplayer->row = opi;
-                mvplayer->column = opj;
-                mvplayer->player = player * (-1);
-                board = setMove(mvplayer, board);
-                cur -= opmaxx;
-
-
-                n += 1;
-                if (free_squares == 0) { //Возможно второе условие не нужно
-                    return;
-                }
-                if (n < 5) {//Если не конец
-                    try(n, cur, maxx, curi, curj, ansi, ansj, board, player);
-
-                }
-                if (n == 5 || free_squares < 6) { //если конец
-                    if (cur >= *maxx) {
-                        *maxx = cur;
-                        *ansi = curi;
-                        *ansj = curj;
+                    int cursaved = cur;
+                    if (n == 0) { //Coordinates of step
+                        curi = i;
+                        curj = j;
                     }
-                }
-                //Стирание лишних ходов
-                for (int x = 0; x < 8; x++) {
-                    for (int y = 0; y < 8; y++) {
-                        board[x][y] = saved_board[x][y];
+                    move* mv; //Запись варианта
+                    mv = (move*)malloc(sizeof(move));
+                    mv->row = i;
+                    mv->column = j;
+                    mv->player = player; //Player всегда фиксированный, потому что это бот. Заменить на константу.
+                    cur += getPriority(i, j, board, player);
+                    board = setMove(mv, board);
+
+                    /*int opi = 0, opj = 0, opmaxx = -1000;
+                    for (int i = 0; i < 8; i++) {
+                        for (int j = 0; j < 8; j++) {
+                            if (getPriority(i, j, board, player * (-1)) > opmaxx) {
+                                opmaxx = getPriority(i, j, board, player * (-1));
+                                opi = i;
+                                opj = j;
+                            }
+                        }
                     }
-                    free(saved_board[x]);
+                    move* mvplayer;
+                    mvplayer = (move*)malloc(sizeof(move));
+                    mvplayer->row = opi;
+                    mvplayer->column = opj;
+                    mvplayer->player = player * (-1);
+                    board = setMove(mvplayer, board);
+                    cur -= opmaxx;*/
+
+                    int opi = 0, opj = 0, opmaxx = -1000; //максимизация эффективности хода оппонента
+                    try(n + 1, 0, &opmaxx, 0, 0, &opi, &opj, board, player * (-1));
+                    move* mvplayer;
+                    mvplayer = (move*)malloc(sizeof(move));
+                    mvplayer->row = opi;
+                    mvplayer->column = opj;
+                    mvplayer->player = player * (-1);
+                    board = setMove(mvplayer, board);
+                    cur -= opmaxx;
+
+
+                    n += 1;
+                    if (n < 6) {//Если не конец
+                        try(n, cur, maxx, curi, curj, ansi, ansj, board, player);
+
+                    }
+                    if (n == 6 || free_squares < 7) { //если конец
+                        if (cur >= *maxx) {
+                            *maxx = cur;
+                            *ansi = curi;
+                            *ansj = curj;
+                        }
+                    }
+                    //Стирание лишних ходов
+                    for (int x = 0; x < 8; x++) {
+                        for (int y = 0; y < 8; y++) {
+                            board[x][y] = saved_board[x][y];
+                        }
+                        free(saved_board[x]);
+                    }
+                    free(saved_board);
+                    free(mvplayer);
+                    free(mv);
                 }
-                free(saved_board);
-                free(mvplayer);
-                free(mv);
             }
         }
     }
