@@ -16,11 +16,12 @@ void drawEnd(float* vertices);
 int choose_game_mode();
 void draw_button();
 
+
 double xPos = 0;
 double yPos = 0;
 
 move* mv;
-int player = -1, game_mode;
+int player = -1, game_mode, flag_ps = 0;
 int** board;
 
 float vertices[6];
@@ -217,6 +218,8 @@ void drawEnd(float* vertices)
 	vertices[3] -= 0.03;
 	vertices[4] -= 0.08;
 	glDrawArrays(GL_LINES, 0, 2);
+
+	
 }
 
 
@@ -231,20 +234,37 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 		mv->column = y;
 		mv->player = player;
 
-
+		if (check_possible_step(board, player) == 0) {
+			if (flag_ps == 1) {
+				puts("END GAME");
+			}
+			else {
+				player *= -1;
+				flag_ps = 1;
+			}
+		}
 		if (isCorrect(mv, board))
 		{
-			//printf("\nx: %d\ny: %d\n", x, y);
 			setMove(mv, board); //Board change
 			player *= -1;
 			if (game_mode == 1) {
-				move* botmv;
-				botmv = botMove(board, player);
-				setMove(botmv, board);
-				player *= -1;
+				if (check_possible_step(board, player) == 0) {
+					if (flag_ps == 1) {
+						puts("END GAME");
+					}
+					else {
+						player *= -1;
+						flag_ps = 1;
+					}
+				}
+				else {
+					move* botmv;
+					botmv = botMove(board, player);
+					setMove(botmv, board);
+					player *= -1;
+				}
 			}
 		}
-		//Здесь будет выводиться ход бота в консоль.
 
 		printMap(board);
 		int temp = ifEnd(board);
@@ -334,7 +354,6 @@ int choose_game_mode() {
 
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
-		
 		draw_button();
 		
 

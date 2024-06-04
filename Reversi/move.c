@@ -50,7 +50,7 @@ int ifEnd(int** map) {
     else return 10; //�����
 }
 
-int setMove(move* mv, int** map)
+int** setMove(move* mv, int** map)
 {
     if (mv->player == 1) {
         map[mv->row][mv->column] = 1;
@@ -287,9 +287,11 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
             if (getPriority(i, j, board, player) > 0)
             {
                 int free_squares = 0;
-                int** saved_board = (int**)malloc(sizeof(int*) * 8);
+                /*int** saved_board = (int**)malloc(sizeof(int*) * 8);*/
+                int saved_board[8][8] = {0};
+
                 for (int x = 0; x < 8; x++) {
-                    saved_board[x] = (int*)malloc(sizeof(int) * 8);
+                    //saved_board[x] = (int*)malloc(sizeof(int) * 8);
                     for (int y = 0; y < 8; y++) {
                         saved_board[x][y] = board[x][y];
                         if (board[x][y] == 0) free_squares++;
@@ -300,13 +302,13 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
                     curi = i;
                     curj = j;
                 }
-                move* mv; //Запись варианта
-                mv = (move*)malloc(sizeof(move));
-                mv->row = i;
-                mv->column = j;
-                mv->player = player; //Player всегда фиксированный, потому что это бот. Заменить на константу.
+                move mv; //Запись варианта
+                
+                mv.row = i;
+                mv.column = j;
+                mv.player = player; //Player всегда фиксированный, потому что это бот. Заменить на константу.
                 cur += getPriority(i, j, board, player);
-                board = setMove(mv, board);
+                board = setMove(&mv, board);
                 
                 int opi = 0, opj = 0, opmaxx = -1000;
                 for (int i = 0; i < 8; i++) {
@@ -318,12 +320,12 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
                         }
                     }
                 }
-                move* mvplayer;
-                mvplayer = (move*)malloc(sizeof(move));
-                mvplayer->row = opi;
-                mvplayer->column = opj;
-                mvplayer->player = player * (-1);
-                board = setMove(mvplayer, board);
+                move mvplayer;
+                
+                mvplayer.row = opi;
+                mvplayer.column = opj;
+                mvplayer.player = player * (-1);
+                board = setMove(&mvplayer, board);
                 cur -= opmaxx;
 
 
@@ -347,11 +349,11 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
                     for (int y = 0; y < 8; y++) {
                         board[x][y] = saved_board[x][y];
                     }
-                    free(saved_board[x]);
+                    /*free(saved_board[x]);*/
                 }
-                free(saved_board);
-                free(mvplayer);
-                free(mv);
+               /* free(saved_board);*/
+                /*free(mvplayer);*/
+                /*free(mv);*/
             }
         }
     }
