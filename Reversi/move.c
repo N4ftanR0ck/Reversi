@@ -185,66 +185,66 @@ int getPriority(int x, int y, int** map, int player) { //How many points we will
     }
     int evristics[8][8] = { 0 }; //Everistical numbers may be fixed while testing the bot
 
-    evristics[0][0] = 20;
-    evristics[0][7] = 20;
-    evristics[7][0] = 20;
-    evristics[7][7] = 20;
+    evristics[0][0] = 10;
+    evristics[0][7] = 10;
+    evristics[7][0] = 10;
+    evristics[7][7] = 10;
 
-    evristics[0][2] = 10;
-    evristics[0][3] = 10;
-    evristics[0][4] = 10;
-    evristics[0][5] = 10;
+    evristics[0][2] = 5;
+    evristics[0][3] = 5;
+    evristics[0][4] = 5;
+    evristics[0][5] = 5;
 
-    evristics[5][7] = 10;
-    evristics[2][7] = 10;
-    evristics[3][7] = 10;
-    evristics[4][7] = 10;
+    evristics[5][7] = 5;
+    evristics[2][7] = 5;
+    evristics[3][7] = 5;
+    evristics[4][7] = 5;
 
-    evristics[7][2] = 10;
-    evristics[7][3] = 10;
-    evristics[7][4] = 10;
-    evristics[7][5] = 10;
+    evristics[7][2] = 5;
+    evristics[7][3] = 5;
+    evristics[7][4] = 5;
+    evristics[7][5] = 5;
 
-    evristics[2][0] = 10;
-    evristics[3][0] = 10;
-    evristics[4][0] = 10;
-    evristics[5][0] = 10;
+    evristics[2][0] = 5;
+    evristics[3][0] = 5;
+    evristics[4][0] = 5;
+    evristics[5][0] = 5;
 
-    evristics[1][2] = -9;
-    evristics[1][3] = -9;
-    evristics[1][4] = -9;
-    evristics[1][5] = -9;
+    evristics[1][2] = -1;
+    evristics[1][3] = -1;
+    evristics[1][4] = -1;
+    evristics[1][5] = -1;
 
-    evristics[5][6] = -9;
-    evristics[2][6] = -9;
-    evristics[3][6] = -9;
-    evristics[4][6] = -9;
+    evristics[5][6] = -1;
+    evristics[2][6] = -1;
+    evristics[3][6] = -1;
+    evristics[4][6] = -1;
 
-    evristics[6][2] = -9;
-    evristics[6][3] = -9;
-    evristics[6][4] = -9;
-    evristics[6][5] = -9;
+    evristics[6][2] = -1;
+    evristics[6][3] = -1;
+    evristics[6][4] = -1;
+    evristics[6][5] = -1;
 
-    evristics[2][1] = -9;
-    evristics[3][1] = -9;
-    evristics[4][1] = -9;
-    evristics[5][1] = -9;
+    evristics[2][1] = -1;
+    evristics[3][1] = -1;
+    evristics[4][1] = -1;
+    evristics[5][1] = -1;
 
-    evristics[0][1] = -15;
-    evristics[1][1] = -15;
-    evristics[1][0] = -15;
+    evristics[0][1] = -5;
+    evristics[1][1] = -5;
+    evristics[1][0] = -5;
 
-    evristics[0][6] = -15;
-    evristics[1][6] = -15;
-    evristics[1][7] = -15;
+    evristics[0][6] = -5;
+    evristics[1][6] = -5;
+    evristics[1][7] = -5;
 
-    evristics[7][6] = -15;
-    evristics[6][6] = -15;
-    evristics[6][7] = -15;
+    evristics[7][6] = -5;
+    evristics[6][6] = -5;
+    evristics[6][7] = -5;
 
-    evristics[6][0] = -15;
-    evristics[6][1] = -15;
-    evristics[7][1] = -15;
+    evristics[6][0] = -5;
+    evristics[6][1] = -5;
+    evristics[7][1] = -5;
 
     int ans = 0;
     map[x][y] = player;
