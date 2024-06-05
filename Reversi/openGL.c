@@ -22,7 +22,7 @@ double xPos = 0;
 double yPos = 0;
 
 move* mv;
-int player = -1, game_mode, flag_ps = 0;//game_mode - выбор режима игры(1 с ботом; 2 без бота, игра один на один) ;flag_ps - флаг возможности хода, если два раза подряд 1, то игра закончилась
+int player = 1, game_mode, flag_ps = 0;//game_mode - выбор режима игры(1 с ботом; 2 без бота, игра один на один) ;flag_ps - флаг возможности хода, если два раза подряд 1, то игра закончилась
 int** board;
 
 float vertices[6];
@@ -64,11 +64,11 @@ int main(void)
 	board[4][4] = -1;
 	board[3][3] = -1;
 
-	if (game_mode == 1) { //Первым ходит бот
-		move* bot_mv = (move*)malloc(sizeof(move));
-		bot_mv = botMove(board, 1);
-		board = setMove(bot_mv, board);
-	}
+	//if (game_mode == 1) { //Первым ходит бот
+	//	move* bot_mv = (move*)malloc(sizeof(move));
+	//	bot_mv = botMove(board, 1);
+	//	board = setMove(bot_mv, board);
+	//}
 
 	glfwSetCursorPosCallback(window, cursorPositionCallback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -257,7 +257,9 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 					flag_ps = 0;
 					move* botmv;
 					botmv = botMove(board, player);
-					setMove(botmv, board);
+					if (botmv->row != 8) {
+						setMove(botmv, board);
+					}
 					player *= -1;
 				}
 			}
@@ -281,7 +283,9 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 						flag_ps = 0;
 						move* botmv;
 						botmv = botMove(board, player);
-						setMove(botmv, board);
+						if (botmv->row != 8) {
+							setMove(botmv, board);
+						}
 						player *= -1;
 					}
 				}
