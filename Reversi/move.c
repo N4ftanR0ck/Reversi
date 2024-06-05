@@ -212,95 +212,95 @@ int getPriority(int x, int y, int** map, int player) { //How many points we will
     evristics[4][0] = 15;
     evristics[5][0] = 15;
 
-    evristics[1][2] = -5;
-    evristics[1][3] = -5;
-    evristics[1][4] = -5;
-    evristics[1][5] = -5;
+    //evristics[1][2] = -10;
+    //evristics[1][3] = -10;
+    //evristics[1][4] = -10;
+    //evristics[1][5] = -10;
 
-    evristics[5][6] = -5;
-    evristics[2][6] = -5;
-    evristics[3][6] = -5;
-    evristics[4][6] = -5;
+    //evristics[5][6] = -10;
+    //evristics[2][6] = -10;
+    //evristics[3][6] = -10;
+    //evristics[4][6] = -10;
 
-    evristics[6][2] = -5;
-    evristics[6][3] = -5;
-    evristics[6][4] = -5;
-    evristics[6][5] = -5;
+    //evristics[6][2] = -10;
+    //evristics[6][3] = -10;
+    //evristics[6][4] = -10;
+    //evristics[6][5] = -10;
 
-    evristics[2][1] = -5;
-    evristics[3][1] = -5;
-    evristics[4][1] = -5;
-    evristics[5][1] = -5;
+    //evristics[2][1] = -10;
+    //evristics[3][1] = -10;
+    //evristics[4][1] = -10;
+    //evristics[5][1] = -10;
 
-    if (map[0][0] == 0) {
-        evristics[0][1] = -9;
-        evristics[1][1] = -9;
-        evristics[1][0] = -9;
-    }
-    if (map[0][7] == 0) {
-        evristics[0][6] = 9;
-    evristics[1][6] = -9;
-    evristics[1][7] = -9;
-    }
-    if (map[7][7] == 0) {
-    evristics[7][6] = -9;
-    evristics[6][6] = -9;
-    evristics[6][7] = -9;
-    }
-    if (map[7][0] == 0) {
-        evristics[6][0] = -9;
-        evristics[6][1] = -9;
-        evristics[7][1] = -9;
-    }
-    int counter = 0;
+    //if (map[0][0] == 0) {
+    //    evristics[0][1] = -13;
+    //    evristics[1][1] = -13;
+    //    evristics[1][0] = -13;
+    //}
+    //if (map[0][7] == 0) {
+    //    evristics[0][6] = -13;
+    //evristics[1][6] = -13;
+    //evristics[1][7] = -13;
+    //}
+    //if (map[7][7] == 0) {
+    //evristics[7][6] = -13;
+    //evristics[6][6] = -13;
+    //evristics[6][7] = -13;
+    //}
+    //if (map[7][0] == 0) {
+    //    evristics[6][0] = -13;
+    //    evristics[6][1] = -13;
+    //    evristics[7][1] = -13;
+    //}
+    //int counter = 0;
 
-    for (int x = 0; x < 8; x++) {
-        if (map[x][0] == player) {
-            counter += 2;
-        }
-    }
-    for (int x = 0; x < 8; x++) {
-        evristics[x][0] += counter;
-    }
-    counter = 0;
-    for (int x = 0; x < 8; x++) {
-        if (map[0][x] == player) {
-            counter += 2;
-        }
-    }
-    for (int x = 0; x < 8; x++) {
-        evristics[0][x] += counter;
-    }
-    counter = 0;
-    for (int x = 0; x < 8; x++) {
-        if (map[x][7] == player) {
-            counter += 2;
-        }
-    }
-    
-    for (int x = 0; x < 8; x++) {
-        evristics[x][7] += counter;
-    }
-    counter = 0;
-    for (int x = 0; x < 8; x++) {
-        if (map[7][x] == player) {
-            counter += 2;
-        }
-    }
-    
-    for (int x = 0; x < 8; x++) {
-        evristics[7][x] += counter;
-    }
-    
-    for (int x = 1; x < 7; x++) {
-        for (int y = 1; y < 7; y++) {
-            counter = 0;
-            for (int l = 0; l < 8; l++) {
-                if (map[x + mr[l]][y + mc[l]] == (player * (-1))) counter += 2; //maybe +=1
-            }
-            evristics[x][y] -= counter;
-        }
-    }
+    //for (int x = 0; x < 8; x++) {
+    //    if (map[x][0] == player) {
+    //        counter += 2;
+    //    }
+    //}
+    //for (int x = 0; x < 8; x++) {
+    //    evristics[x][0] += counter;
+    //}
+    //counter = 0;
+    //for (int x = 0; x < 8; x++) {
+    //    if (map[0][x] == player) {
+    //        counter += 2;
+    //    }
+    //}
+    //for (int x = 0; x < 8; x++) {
+    //    evristics[0][x] += counter;
+    //}
+    //counter = 0;
+    //for (int x = 0; x < 8; x++) {
+    //    if (map[x][7] == player) {
+    //        counter += 2;
+    //    }
+    //}
+    //
+    //for (int x = 0; x < 8; x++) {
+    //    evristics[x][7] += counter;
+    //}
+    //counter = 0;
+    //for (int x = 0; x < 8; x++) {
+    //    if (map[7][x] == player) {
+    //        counter += 2;
+    //    }
+    //}
+    //
+    //for (int x = 0; x < 8; x++) {
+    //    evristics[7][x] += counter;
+    //}
+    //
+    //for (int x = 1; x < 7; x++) {
+    //    for (int y = 1; y < 7; y++) {
+    //        counter = 0;
+    //        for (int l = 0; l < 8; l++) {
+    //            if (map[x + mr[l]][y + mc[l]] == (player * (-1))) counter += 2; //maybe +=1
+    //        }
+    //        evristics[x][y] -= counter;
+    //    }
+    //}
 
 
     int ans = 0;
@@ -317,7 +317,7 @@ int getPriority(int x, int y, int** map, int player) { //How many points we will
                 c -= mc[i];
                 while (map[r][c] != map[x][y]) {
                     flag = 1;
-                    ans += 10;
+                    ans += 10; //10
                     ans += evristics[r][c];
                     r -= mr[i];
                     c -= mc[i];
@@ -341,10 +341,7 @@ int getPriority(int x, int y, int** map, int player) { //How many points we will
 void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, int** board, int player) {
     //С этой функцией работаем так, так что в botStep() делаем все нужные переменные и передаем их в try как указатели, а на выходе берем итоговое значение из ansi ansj
     int i, j;
-    if (n == 6) {
-        if (curi != 0) {
-            i = 9;  
-        }
+    if (n == 4) {
         if (cur >= *maxx) {
             *maxx = cur;
             *ansi = curi;
@@ -367,10 +364,10 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
                         }
                     }
                     int cursaved = cur;
-                    if (*maxx==-10000) { //Coordinates of step //А мах то не перезаписывается!
+                    if (n==0 || *maxx==-10000) { //Coordinates of step //А мах то не перезаписывается!
                         curi = i;
                         curj = j;
-                        *maxx = -1000; //мб лишнее
+                        *maxx = -5000; //мб лишнее
                     }
                     move* mv; //Запись варианта
                     mv = (move*)malloc(sizeof(move));
@@ -386,7 +383,7 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
                     try(n + 1, 0, &opmaxx, 0, 0, &opi, &opj, board, player * (-1));
                     move* mvplayer;
                     mvplayer = (move*)malloc(sizeof(move));
-                    if (opmaxx != -1000) {
+                    if (opmaxx != -10000) {
                         mvplayer->row = opi;
                         mvplayer->column = opj;
                         mvplayer->player = player * (-1);
@@ -394,7 +391,7 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
                         cur -= opmaxx;
                     }
 
-                    if (free_squares < 7-n) { //если конец
+                    if (free_squares < 5-n) { //если конец
                         if (cur >= *maxx) {
                             *maxx = cur;
                             *ansi = curi;
@@ -402,9 +399,9 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
                         }
                     }
 
-                    if (n < 6) {//Если не конец
+                    if (n < 4) {//Если не конец
                         try(n+1, cur, maxx, curi, curj, ansi, ansj, board, player);
-                        if (cur >= *maxx) {
+                        if (cur >= *maxx || *maxx==-10000) {
                             *maxx = cur;
                             *ansi = curi;
                             *ansj = curj;
@@ -438,7 +435,7 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
 }
 
 move* botMove(int** board, int player) {
-    int ansi = 8, ansj = 8, maxx = -10000, cur = 0;
+    int ansi = 8, ansj = 8, maxx = -1000, cur = 0;
     try(0, cur, &maxx, 0, 0, &ansi, &ansj, board, player);
     move* mv = (move*)malloc(sizeof(move));
     mv->column = ansj;
