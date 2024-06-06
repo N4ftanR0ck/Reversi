@@ -1,13 +1,14 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "move.h"
 #include <stdio.h>
+#include <malloc.h>
 
 void printMap(int** map) {
     printf("\nHere is the gaming board:\n");
 
     printf("  ");
     for (int j = 0; j < 8; j++) {
-        printf(" %d  ", j+1);
+        printf(" %d  ", j + 1);
     }
     printf("\n ");
     for (int j = 0; j < 33; j++) {
@@ -15,7 +16,7 @@ void printMap(int** map) {
     }
     printf("\n");
     for (int i = 0; i < 8; i++) {
-        printf("%d| ",i+1);
+        printf("%d| ", i + 1);
         for (int j = 0; j < 8; j++) {
             if (map[i][j] == 1) {
                 printf("W | ");
@@ -130,14 +131,14 @@ int isCorrect(move* mv, int** board) {/*1 is incorrect data
 }
 
 
-int check_possible_step(int **board, int player){/*1 - possible     0 - impossible*/
-    for (int i=0; i<8; i++){
-        for (int j=0; j<8; j++){
+int check_possible_step(int** board, int player) {/*1 - possible     0 - impossible*/
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
 
-            if (board[i][j] == 0){
+            if (board[i][j] == 0) {
 
-                for (int dx = -1; dx<=1; dx++){
-                    for (int dy = -1; dy<=1; dy++){
+                for (int dx = -1; dx <= 1; dx++) {
+                    for (int dy = -1; dy <= 1; dy++) {
 
                         if (dx == 0 && dy == 0) continue;
 
@@ -145,13 +146,13 @@ int check_possible_step(int **board, int player){/*1 - possible     0 - impossib
                         int y = j + dy;
                         int opponent = player * (-1);
                         int check_opponent = 0;
-                        while (x >= 0 && x < 8 && y >= 0 && y < 8 && board[x][y] == opponent){
+                        while (x >= 0 && x < 8 && y >= 0 && y < 8 && board[x][y] == opponent) {
                             x += dx;
                             y += dy;
                             check_opponent = 1;
                         }
-                        
-                        if (check_opponent == 1 && x >= 0 && x < 8 && y >= 0 && y < 8 && board[x][y] == player){
+
+                        if (check_opponent == 1 && x >= 0 && x < 8 && y >= 0 && y < 8 && board[x][y] == player) {
                             return 1;
                         }
 
@@ -159,7 +160,7 @@ int check_possible_step(int **board, int player){/*1 - possible     0 - impossib
                 }
 
             }
-            
+
         }
     }
 
@@ -305,14 +306,14 @@ int getPriority(int x, int y, int** map, int player) { //How many points we will
 
     int ans = 0;
     map[x][y] = player;
-   
+
     int flag = 0; // checking is it possible to place a dot here
     for (int i = 0; i < 8; i++) {
         int r = x + mr[i], c = y + mc[i];
         while (r < 8 && c < 8 && r>-1 && c > -1 && (map[r][c] != map[x][y]) && map[r][c] != 0) {
             r += mr[i];
             c += mc[i];
-            if (r < 8 && c < 8 && r>-1 && c > -1 && map[r][c] == map[x][y] && map[x][y]!=0) {
+            if (r < 8 && c < 8 && r>-1 && c > -1 && map[r][c] == map[x][y] && map[x][y] != 0) {
                 r -= mr[i];
                 c -= mc[i];
                 while (map[r][c] != map[x][y]) {
@@ -326,10 +327,10 @@ int getPriority(int x, int y, int** map, int player) { //How many points we will
         }
     }
     map[x][y] = 0;
-   
+
     ans += evristics[x][y] * flag;
     int o;
-    if (x == 0 && y == 2 && flag==1) {
+    if (x == 0 && y == 2 && flag == 1) {
         o = 5;
     }
 
@@ -349,7 +350,7 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
         }
         return;
     }
-    else{
+    else {
         for (i = 0; i < 8; i++) {
             for (j = 0; j < 8; j++) {
                 if (getPriority(i, j, board, player) > 0)
@@ -364,7 +365,7 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
                         }
                     }
                     int cursaved = cur;
-                    if (n==0 || *maxx==-10000) { //Coordinates of step //А мах то не перезаписывается!
+                    if (n == 0 || *maxx == -10000) { //Coordinates of step //А мах то не перезаписывается!
                         curi = i;
                         curj = j;
                         *maxx = -5000; //мб лишнее
@@ -377,7 +378,7 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
                     cur += getPriority(i, j, board, player);
                     board = setMove(mv, board);
 
-                    
+
 
                     int opi = 0, opj = 0, opmaxx = -10000; //максимизация эффективности хода оппонента
                     try(n + 1, 0, &opmaxx, 0, 0, &opi, &opj, board, player * (-1));
@@ -391,7 +392,7 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
                         cur -= opmaxx;
                     }
 
-                    if (free_squares < 5-n) { //если конец
+                    if (free_squares < 5 - n) { //если конец
                         if (cur >= *maxx) {
                             *maxx = cur;
                             *ansi = curi;
@@ -400,8 +401,8 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
                     }
 
                     if (n < 4) {//Если не конец
-                        try(n+1, cur, maxx, curi, curj, ansi, ansj, board, player);
-                        if (cur >= *maxx || *maxx==-10000) {
+                        try(n + 1, cur, maxx, curi, curj, ansi, ansj, board, player);
+                        if (cur >= *maxx || *maxx == -10000) {
                             *maxx = cur;
                             *ansi = curi;
                             *ansj = curj;
@@ -416,14 +417,14 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
                     //    n -= 1;
                     //}
                     //Стирание лишних ходов
-                    
+
                     for (int x = 0; x < 8; x++) {
                         for (int y = 0; y < 8; y++) {
                             board[x][y] = saved_board[x][y];
                         }
                         free(saved_board[x]);
                     }
-                    
+
                     cur = cursaved;
                     free(saved_board);
                     free(mvplayer);
