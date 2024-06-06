@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "move.h"
 #include <stdio.h>
+#include <malloc.h>
 
 void printMap(int** map) {
     printf("\nHere is the gaming board:\n");
