@@ -15,6 +15,8 @@ void drawCircle(int pos1, int pos2, int player, float* vertices);
 void drawEnd(float* vertices);
 int choose_game_mode();
 void draw_button();
+void draw_button_bot();
+int choose_bot_mode();
 void end_game(int** board);
 
 
@@ -29,16 +31,17 @@ float vertices[6];
 
 int main(void)
 {
-	game_mode = choose_game_mode();
+	game_mode = choose_game_mode(); int sec;
 	if (game_mode == 1) {
 		puts("Game mode 1!");
+		sec = choose_bot_mode();
 	}
-	else if (game_mode == 2){
+	else if (game_mode == 2) {
 		puts("Game mode 2!");
 	}
-	else { 
+	else {
 		puts("Error!");
-		return 0; 
+		return 0;
 	}
 	GLFWwindow* window;
 	if (!glfwInit())
@@ -226,7 +229,7 @@ void drawEnd(float* vertices)
 	vertices[4] -= 0.08;
 	glDrawArrays(GL_LINES, 0, 2);
 
-	
+
 }
 
 
@@ -241,16 +244,16 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 		mv->column = y;
 		mv->player = player;
 
-		
+
 		if (isCorrect(mv, board))
 		{
 			flag_ps = 0;
-			setMove(mv, board); 
+			setMove(mv, board);
 			player *= -1;
 
 			if (game_mode == 1) {
 				if (check_possible_step(board, player) == 0) {
-					player *= -1; 
+					player *= -1;
 					flag_ps = 1;
 				}
 				else {
@@ -274,9 +277,9 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 
 				if (game_mode == 1) {
 					if (check_possible_step(board, player) == 0) {
-						player *= -1; 
+						player *= -1;
 						if (check_possible_step(board, player) == 0) {
-							end_game(board); 
+							end_game(board);
 						}
 					}
 					else {
@@ -372,7 +375,7 @@ int choose_game_mode() {
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	glfwSetCursorEnterCallback(window, cursorEnterCallback);
-	
+
 
 	int selectedMode = 0;
 	glfwMakeContextCurrent(window);
@@ -380,16 +383,16 @@ int choose_game_mode() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_COLOR_ARRAY);
-		
+
 
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
 		draw_button();
 
-		ypos = 600 - ypos; 
+		ypos = 600 - ypos;
 
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-			if (xpos >= 60 && xpos <= 540 && ypos >= 0 && ypos <= 400 ) {
+			if (xpos >= 60 && xpos <= 540 && ypos >= 0 && ypos <= 400) {
 				selectedMode = 1;
 				break;
 			}
@@ -409,6 +412,153 @@ int choose_game_mode() {
 	return selectedMode;
 }
 
+
+int choose_bot_mode() {
+	if (!glfwInit()) {
+		fprintf(stderr, "Failed to initialize GLFW\n");
+		return -1;
+	}
+
+	GLFWwindow* window = glfwCreateWindow(1200, 800, "Choose Bot Mode", NULL, NULL);
+	if (!window) {
+		fprintf(stderr, "Failed to open GLFW window\n");
+		glfwTerminate();
+		return -1;
+	}
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+	glfwSetCursorEnterCallback(window, cursorEnterCallback);
+
+
+	int selectedMode = 0;
+	glfwMakeContextCurrent(window);
+	while (!glfwWindowShouldClose(window)) {
+		glClear(GL_COLOR_BUFFER_BIT);
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_COLOR_ARRAY);
+
+
+		double xpos, ypos;
+		glfwGetCursorPos(window, &xpos, &ypos);
+		draw_button_bot();
+
+		ypos = 600 - ypos;
+
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+			if (xpos >= 60 && xpos <= 540 && ypos >= 0 && ypos <= 400) {
+				selectedMode = 1;
+				break;
+			}
+			else if (xpos >= 660 && xpos <= 1140 && ypos >= 0 && ypos <= 400) {
+				selectedMode = 2;
+				break;
+			}
+		}
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	}
+
+	glfwDestroyWindow(window);
+	glfwTerminate();
+
+	return selectedMode;
+}
+
+void draw_button_bot() {
+	vertices[0] = -0.9;
+	vertices[1] = 0.5;
+	vertices[2] = 0.0;
+	vertices[3] = -0.9;
+	vertices[4] = -0.5;
+	vertices[5] = 0.0;
+	vertices[6] = -0.1;
+	vertices[7] = -0.5;
+	vertices[8] = 0.0;
+	vertices[9] = -0.1;
+	vertices[10] = 0.5;
+	vertices[11] = 0.0;
+
+	float color[] =
+	{
+		128, 0, 128,
+		123, 104, 238,
+		128, 0, 128,
+		123, 104, 238
+	};
+
+
+	glVertexPointer(3, GL_FLOAT, 0, vertices);
+	glColorPointer(3, GL_FLOAT, 0, color);
+	glDrawArrays(GL_LINES, 0, 4);
+	vertices[0] = -0.1;
+	vertices[1] = -0.5;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[3] = -0.1;
+	vertices[4] = 0.5;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = -0.9;
+	vertices[1] = 0.5;
+	glDrawArrays(GL_LINES, 0, 2);
+
+
+	vertices[0] = 0.9;
+	vertices[1] = -0.5;
+	vertices[2] = 0.0;
+	vertices[3] = 0.9;
+	vertices[4] = 0.5;
+	vertices[5] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = 0.1;
+	vertices[1] = 0.5;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[3] = 0.1;
+	vertices[4] = -0.5;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = 0.9;
+	vertices[1] = -0.5;
+	glDrawArrays(GL_LINES, 0, 2);
+
+	//WRITE 1 and 2
+	//1
+	vertices[0] = 0.15-0.7;
+	vertices[1] = 0.2;
+	vertices[2] = 0.0;
+	vertices[3] = 0.2 - 0.7;
+	vertices[4] = 0.3;
+	vertices[5] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = 0.2 - 0.7;
+	vertices[1] = -0.3;
+	vertices[2] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+
+	//2
+	vertices[0] = 0.65-0.2;
+	vertices[1] = 0.3;
+	vertices[2] = 0.0;
+	vertices[3] = 0.65 - 0.2;
+	vertices[4] = 0.2;
+	vertices[5] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[3] = 0.75 - 0.2;
+	vertices[4] = 0.3;
+	vertices[5] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = 0.75 - 0.2;
+	vertices[1] = 0.05;
+	vertices[2] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[3] = 0.65 - 0.2;
+	vertices[4] = -0.3;
+	vertices[5] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = 0.77 - 0.2;
+	vertices[1] = -0.3;
+	vertices[2] = 0.0;
+	glDrawArrays(GL_LINES, 0, 2);
+
+}
 
 void draw_button() {// for choose_game_mode
 	vertices[0] = -0.9;
@@ -570,7 +720,7 @@ void draw_button() {// for choose_game_mode
 	vertices[1] = 0.3;
 	vertices[2] = 0.0;
 	glDrawArrays(GL_LINES, 0, 2);
-	
+
 	//n
 	vertices[0] = 0.5;
 	vertices[1] = -0.3;
