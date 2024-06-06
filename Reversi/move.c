@@ -181,7 +181,7 @@ move* getMove(move* mv, int player)
 
 int getPriority(int x, int y, int** map, int player) { //How many points we will get after this step + evristics
     if (map[x][y] != 0) { //-1 bot, 1 player
-        return 0;
+        return 0;//pupupu
     }
     int evristics[8][8] = { 0 }; //Everistical numbers may be fixed while testing the bot
     int mr[8] = { -1, -1, -1, 0, 1, 1, 1, 0 };
