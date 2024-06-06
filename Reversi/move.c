@@ -184,14 +184,15 @@ int getPriority(int x, int y, int** map, int player) { //How many points we will
     if (map[x][y] != 0) { //-1 bot, 1 player
         return 0;//pupupu
     }
+    map[x][y] = player;
     int evristics[8][8] = { 0 }; //Everistical numbers may be fixed while testing the bot
     int mr[8] = { -1, -1, -1, 0, 1, 1, 1, 0 };
     int mc[8] = { -1, 0, 1, 1, 1, 0, -1, -1 };
 
-    evristics[0][0] = 20;
-    evristics[0][7] = 20;
-    evristics[7][0] = 20;
-    evristics[7][7] = 20;
+    evristics[0][0] = 1000;
+    evristics[0][7] = 1000;
+    evristics[7][0] = 1000;
+    evristics[7][7] = 1000;
 
     evristics[0][2] = 15;
     evristics[0][3] = 15;
@@ -213,91 +214,91 @@ int getPriority(int x, int y, int** map, int player) { //How many points we will
     evristics[4][0] = 15;
     evristics[5][0] = 15;
 
-    //evristics[1][2] = -10;
-    //evristics[1][3] = -10;
-    //evristics[1][4] = -10;
-    //evristics[1][5] = -10;
+  /*  evristics[1][2] = -10;
+    evristics[1][3] = -10;
+    evristics[1][4] = -10;
+    evristics[1][5] = -10;
 
-    //evristics[5][6] = -10;
-    //evristics[2][6] = -10;
-    //evristics[3][6] = -10;
-    //evristics[4][6] = -10;
+    evristics[5][6] = -10;
+    evristics[2][6] = -10;
+    evristics[3][6] = -10;
+    evristics[4][6] = -10;
 
-    //evristics[6][2] = -10;
-    //evristics[6][3] = -10;
-    //evristics[6][4] = -10;
-    //evristics[6][5] = -10;
+    evristics[6][2] = -10;
+    evristics[6][3] = -10;
+    evristics[6][4] = -10;
+    evristics[6][5] = -10;
 
-    //evristics[2][1] = -10;
-    //evristics[3][1] = -10;
-    //evristics[4][1] = -10;
-    //evristics[5][1] = -10;
+    evristics[2][1] = -10;
+    evristics[3][1] = -10;
+    evristics[4][1] = -10;
+    evristics[5][1] = -10;*/
 
-    //if (map[0][0] == 0) {
-    //    evristics[0][1] = -13;
-    //    evristics[1][1] = -13;
-    //    evristics[1][0] = -13;
-    //}
-    //if (map[0][7] == 0) {
-    //    evristics[0][6] = -13;
-    //evristics[1][6] = -13;
-    //evristics[1][7] = -13;
-    //}
-    //if (map[7][7] == 0) {
-    //evristics[7][6] = -13;
-    //evristics[6][6] = -13;
-    //evristics[6][7] = -13;
-    //}
-    //if (map[7][0] == 0) {
-    //    evristics[6][0] = -13;
-    //    evristics[6][1] = -13;
-    //    evristics[7][1] = -13;
-    //}
-    //int counter = 0;
+    if (map[0][0] == 0) {
+        evristics[0][1] = -30;
+        evristics[1][1] = -30;
+        evristics[1][0] = -30;
+    }
+    if (map[0][7] == 0) {
+        evristics[0][6] = -30;
+    evristics[1][6] = -30;
+    evristics[1][7] = -30;
+    }
+    if (map[7][7] == 0) {
+    evristics[7][6] = -30;
+    evristics[6][6] = -30;
+    evristics[6][7] = -30;
+    }
+    if (map[7][0] == 0) {
+        evristics[6][0] = -30;
+        evristics[6][1] = -30;
+        evristics[7][1] = -30;
+    }
+    int counter = 0;
 
-    //for (int x = 0; x < 8; x++) {
-    //    if (map[x][0] == player) {
-    //        counter += 2;
-    //    }
-    //}
-    //for (int x = 0; x < 8; x++) {
-    //    evristics[x][0] += counter;
-    //}
-    //counter = 0;
-    //for (int x = 0; x < 8; x++) {
-    //    if (map[0][x] == player) {
-    //        counter += 2;
-    //    }
-    //}
-    //for (int x = 0; x < 8; x++) {
-    //    evristics[0][x] += counter;
-    //}
-    //counter = 0;
-    //for (int x = 0; x < 8; x++) {
-    //    if (map[x][7] == player) {
-    //        counter += 2;
-    //    }
-    //}
-    //
-    //for (int x = 0; x < 8; x++) {
-    //    evristics[x][7] += counter;
-    //}
-    //counter = 0;
-    //for (int x = 0; x < 8; x++) {
-    //    if (map[7][x] == player) {
-    //        counter += 2;
-    //    }
-    //}
-    //
-    //for (int x = 0; x < 8; x++) {
-    //    evristics[7][x] += counter;
-    //}
+    for (int x = 0; x < 8; x++) {
+        if (map[x][0] == player) {
+            counter += 1;
+        }
+    }
+    for (int x = 0; x < 8; x++) {
+        evristics[x][0] += counter;
+    }
+    counter = 0;
+    for (int x = 0; x < 8; x++) {
+        if (map[0][x] == player) {
+            counter += 1;
+        }
+    }
+    for (int x = 0; x < 8; x++) {
+        evristics[0][x] += counter;
+    }
+    counter = 0;
+    for (int x = 0; x < 8; x++) {
+        if (map[x][7] == player) {
+            counter += 1;
+        }
+    }
+    
+    for (int x = 0; x < 8; x++) {
+        evristics[x][7] += counter;
+    }
+    counter = 0;
+    for (int x = 0; x < 8; x++) {
+        if (map[7][x] == player) {
+            counter += 1;
+        }
+    }
+    
+    for (int x = 0; x < 8; x++) {
+        evristics[7][x] += counter;
+    }
     //
     //for (int x = 1; x < 7; x++) {
     //    for (int y = 1; y < 7; y++) {
     //        counter = 0;
     //        for (int l = 0; l < 8; l++) {
-    //            if (map[x + mr[l]][y + mc[l]] == (player * (-1))) counter += 2; //maybe +=1
+    //            if (map[x + mr[l]][y + mc[l]] == (player * (-1))) counter += 1; //maybe +=1
     //        }
     //        evristics[x][y] -= counter;
     //    }
@@ -305,7 +306,7 @@ int getPriority(int x, int y, int** map, int player) { //How many points we will
 
 
     int ans = 0;
-    map[x][y] = player;
+    
 
     int flag = 0; // checking is it possible to place a dot here
     for (int i = 0; i < 8; i++) {
@@ -318,7 +319,7 @@ int getPriority(int x, int y, int** map, int player) { //How many points we will
                 c -= mc[i];
                 while (map[r][c] != map[x][y]) {
                     flag = 1;
-                    ans += 10; //10
+                    ans += 30; //10
                     ans += evristics[r][c];
                     r -= mr[i];
                     c -= mc[i];
@@ -329,12 +330,8 @@ int getPriority(int x, int y, int** map, int player) { //How many points we will
     map[x][y] = 0;
 
     ans += evristics[x][y] * flag;
-    int o;
-    if (x == 0 && y == 2 && flag == 1) {
-        o = 5;
-    }
-
-    if (ans < 0 && flag == 1) return 1;
+   
+    if (ans <= 0 && flag == 1) return 1;
     if (flag == 0) return 0;
     else return ans;
 }
@@ -342,7 +339,7 @@ int getPriority(int x, int y, int** map, int player) { //How many points we will
 void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, int** board, int player) {
     //С этой функцией работаем так, так что в botStep() делаем все нужные переменные и передаем их в try как указатели, а на выходе берем итоговое значение из ansi ansj
     int i, j;
-    if (n == 4) {
+    if (n == 5) {
         if (cur >= *maxx) {
             *maxx = cur;
             *ansi = curi;
@@ -392,7 +389,7 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
                         cur -= opmaxx;
                     }
 
-                    if (free_squares < 5 - n) { //если конец
+                    if (free_squares < 6 - n) { //если конец
                         if (cur >= *maxx) {
                             *maxx = cur;
                             *ansi = curi;
@@ -400,7 +397,7 @@ void try(int n, int cur, int* maxx, int curi, int curj, int* ansi, int* ansj, in
                         }
                     }
 
-                    if (n < 4) {//Если не конец
+                    if (n < 5) {//Если не конец
                         try(n + 1, cur, maxx, curi, curj, ansi, ansj, board, player);
                         if (cur >= *maxx || *maxx == -10000) {
                             *maxx = cur;

@@ -263,8 +263,12 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 					botmv = botMove(board, player);
 					if (botmv->row != 8) {
 						setMove(botmv, board);
+						player *= -1;
 					}
-					player *= -1;
+					else {
+						flag_ps = 1;
+						player *= -1;
+					}
 				}
 			}
 		}
