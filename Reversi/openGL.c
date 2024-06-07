@@ -16,7 +16,8 @@ void drawEnd(float* vertices);
 int choose_game_mode();
 void draw_button();
 void draw_button_bot();
-int choose_bot_mode();
+int choose_bot_mode(); 
+void drawWIN(float* vertices);
 void end_game(int** board);
 
 
@@ -59,10 +60,10 @@ int main(void)
 	{
 		for (int j = 0; j < 8; j++)
 		{
-			board[i][j] = 0;
+			board[i][j] = 1;
 		}
 	}
-	board[3][4] = 1;
+	board[3][4] = 0;
 	board[4][3] = 1;
 	board[4][4] = -1;
 	board[3][3] = -1;
@@ -137,7 +138,8 @@ int main(void)
 
 		glDisableClientState(GL_COLOR_ARRAY);
 
-		int kk = 0;
+		int white = 0; 
+		int black = 0;
 		for (int i = 0; i < 8; i++)
 		{
 			for (int j = 0; j < 8; j++)
@@ -145,23 +147,66 @@ int main(void)
 				if (board[i][j] == 1)
 				{
 					drawCircle(i, j, 1, vertices);
-					++kk;
+					++white;
 				}
 				if (board[i][j] == -1)
 				{
 					drawCircle(i, j, 0, vertices);
-					++kk;
+					++black;
 				}
 			}
 		}
-		if (kk == 64)
-			drawEnd(vertices);
+		//if (white+black == 64)
+			//end_game(board);
+		/*if (white + black == 64)
+			drawEnd(vertices);*/
 		/*drawCircle(3, 3, 0, vertices);
 		drawCircle(4, 4, 0, vertices);
 		drawCircle(3, 4, 1, vertices);
 		//drawCircle(4, 3, 1, vertices);*/
 
 		//glDrawArrays(GL_TRIANGLE_FAN, 0, 3);
+		int end = 0;
+		if (end = ifEnd(board))
+		{
+
+			glEnableClientState(GL_COLOR_ARRAY);
+			drawEnd(vertices);
+			float color1[] =
+			{
+				255, 219, 88,
+				255, 255, 0,
+				255, 200, 70
+			};
+
+			glColorPointer(3, GL_FLOAT, 0, color1);
+			if (end == 1)
+			{
+				for (int i = 0; i < 8; i++)
+				{
+					for (int j = -3; j > -8; j--)
+					{
+						drawCircle(j, i, 1, vertices);
+					}
+				}
+			}
+			if (end == -1)
+			{
+				for (int i = 0; i < 8; i++)
+				{
+					for (int j = -3; j > -8; j--)
+					{
+						drawCircle(j, i, 0, vertices);
+					}
+				}
+			}
+			if (end == 10)
+			{
+				drawCircle(-3, 3, 1, vertices);
+				drawCircle(-3, 3, 0, vertices);
+			}
+		}
+		
 		glDisableClientState(GL_VERTEX_ARRAY);
 
 		glfwSwapBuffers(window);
@@ -228,10 +273,15 @@ void drawEnd(float* vertices)
 	vertices[3] -= 0.03;
 	vertices[4] -= 0.08;
 	glDrawArrays(GL_LINES, 0, 2);
-
-
+	drawWIN(vertices);
 }
 
+void drawWIN(float* vertices)
+{
+	//W
+	//I
+	//N
+}
 
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
@@ -303,19 +353,25 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 
 void end_game(int** board) {
 	printMap(board);
+	drawWIN(vertices);
+	drawEnd(vertices);
 	int temp = ifEnd(board);
 	if (temp == 1)
 	{
 		printf("first player win!");
-		drawEnd(vertices);
+		drawCircle(3, 3, 0, vertices);
 	}
 	if (temp == -1)
 	{
 		printf("second player win!");
-		drawEnd(vertices);
+		drawCircle(3, 3, 1, vertices);
 	}
 	if (temp == 10)
+	{
 		printf("draw");
+		drawCircle(3, 3, 0, vertices);
+		drawCircle(3, 4, 1, vertices);
+	}
 }
 
 void drawCircle(int pos1, int pos2, int player, float* vertices)
