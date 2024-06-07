@@ -25,7 +25,7 @@ double xPos = 0;
 double yPos = 0;
 
 move* mv;
-int player = 1, game_mode, flag_ps = 0;//game_mode - выбор режима игры(1 с ботом; 2 без бота, игра один на один) ;flag_ps - флаг возможности хода, если два раза подряд 1, то игра закончилась
+int player = 1, game_mode, flag_ps = 0, endGame = 0;//game_mode - выбор режима игры(1 с ботом; 2 без бота, игра один на один) ;flag_ps - флаг возможности хода, если два раза подряд 1, то игра закончилась
 int** board;
 
 float vertices[6];
@@ -167,44 +167,85 @@ int main(void)
 		//drawCircle(4, 3, 1, vertices);*/
 
 		//glDrawArrays(GL_TRIANGLE_FAN, 0, 3);
+		
 		int end = 0;
-		if (end = ifEnd(board))
+		if (end = ifEnd(board) || endGame)
 		{
+			if (white != black){
+				if (endGame)
+				{
+					if (white > black)
+						end = 1;
+					if (white < black)
+						end = -1;
+					if (white == black)
+						end == 10;
+				}
 
-			glEnableClientState(GL_COLOR_ARRAY);
-			drawEnd(vertices);
-			float color1[] =
-			{
-				255, 219, 88,
-				255, 255, 0,
-				255, 200, 70
-			};
+				glEnableClientState(GL_COLOR_ARRAY);
+				drawEnd(vertices);
+				float color1[] =
+				{
+					255, 219, 88,
+					255, 255, 0,
+					255, 200, 70
+				};
 
-			glColorPointer(3, GL_FLOAT, 0, color1);
-			if (end == 1)
+				glColorPointer(3, GL_FLOAT, 0, color1);
+				if (end == 1)
+				{
+					drawWIN(vertices);
+					for (int i = 0; i < 8; i++)
+					{
+						for (int j = -3; j > -8; j--)
+						{
+							drawCircle(j, i, 1, vertices);
+						}
+					}
+				}
+				if (end == -1)
+				{
+					drawWIN(vertices);
+					for (int i = 0; i < 8; i++)
+					{
+						for (int j = -3; j > -8; j--)
+						{
+							drawCircle(j, i, 0, vertices);
+						}
+					}
+				}
+				if (end == 10)
+				{
+					drawWIN(vertices);
+					for (int i = 0; i < 8; i++)
+					{
+						for (int j = -3; j > -8; j--)
+						{
+							if ((i + j) % 2 == 0)
+								drawCircle(j, i, 0, vertices);
+							else
+								drawCircle(j, i, 1, vertices);
+
+						}
+					}
+				}
+			}
+			else
 			{
+
+				drawEnd(vertices);
+				drawWIN(vertices);
 				for (int i = 0; i < 8; i++)
 				{
 					for (int j = -3; j > -8; j--)
 					{
-						drawCircle(j, i, 1, vertices);
+						if ((i + j) % 2 == 0)
+							drawCircle(j, i, 0, vertices);
+						else
+							drawCircle(j, i, 1, vertices);
+
 					}
 				}
-			}
-			if (end == -1)
-			{
-				for (int i = 0; i < 8; i++)
-				{
-					for (int j = -3; j > -8; j--)
-					{
-						drawCircle(j, i, 0, vertices);
-					}
-				}
-			}
-			if (end == 10)
-			{
-				drawCircle(-3, 3, 1, vertices);
-				drawCircle(-3, 3, 0, vertices);
 			}
 		}
 		
@@ -279,9 +320,40 @@ void drawEnd(float* vertices)
 
 void drawWIN(float* vertices)
 {
-	//W
-	//I
-	//N
+	vertices[0] = -0.250 - 0.72;
+	vertices[1] = 0.95;
+	vertices[3] = -0.250 - 0.7;
+	vertices[4] = 0.85;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = -0.250 - 0.68;
+	vertices[1] = 0.95;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[3] = -0.250 - 0.66;
+	vertices[4] = 0.85;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = -0.250 - 0.64;
+	vertices[1] = 0.95;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = -0.250 - 0.62;
+	vertices[1] = 0.95;
+	vertices[3] = -0.250 - 0.62;
+	vertices[4] = 0.85;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = -0.250 - 0.60;
+	vertices[1] = 0.95;
+	vertices[3] = -0.250 - 0.60;
+	vertices[4] = 0.85;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = -0.250 - 0.55;
+	vertices[1] = 0.95;
+	vertices[3] = -0.250 - 0.55;
+	vertices[4] = 0.85;
+	glDrawArrays(GL_LINES, 0, 2);
+	vertices[0] = -0.250 - 0.60;
+	vertices[1] = 0.95;
+	vertices[3] = -0.250 - 0.55;
+	vertices[4] = 0.85;
+	glDrawArrays(GL_LINES, 0, 2);
 }
 
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
@@ -320,7 +392,7 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 		}
 		if (check_possible_step(board, player) == 0) {// проверяем возможность хода первого игрока
 			if (flag_ps == 1) {
-				end_game(board);
+				endGame = 1;
 			}
 			else {//переключение на второго игрока
 				player *= -1;
