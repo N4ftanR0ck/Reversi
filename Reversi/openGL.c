@@ -35,7 +35,7 @@ int main(void)
 	game_mode = choose_game_mode(); int sec;
 	if (game_mode == 1) {
 		puts("Game mode 1!");
-		sec = choose_bot_mode();
+		//sec = choose_bot_mode();
 	}
 	else if (game_mode == 2) {
 		puts("Game mode 2!");
@@ -68,12 +68,12 @@ int main(void)
 	board[4][4] = -1;
 	board[3][3] = -1;
 
-	if (game_mode == 1 && sec == 2) { //первым ходит бот
-		move* bot_mv = (move*)malloc(sizeof(move));
-		bot_mv = botMove(board, 1);
-		board = setMove(bot_mv, board);
-		player *= -1;
-	}
+	//if (game_mode == 1 && sec == 2) { //первым ходит бот
+	//	move* bot_mv = (move*)malloc(sizeof(move));
+	//	bot_mv = botMove(board, 1);
+	//	board = setMove(bot_mv, board);
+	//	player *= -1;
+	//}
 
 	glfwSetCursorPosCallback(window, cursorPositionCallback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
